@@ -1,0 +1,7 @@
+# Crochet pre-commit publié par le socle : gardes A2 (secrets) et A6 (gros fichiers), sans dépendance.
+- id: memnius-gardes
+  name: Gardes Memnius A2 et A6
+  entry: gardes/gardes.py --seulement A2,A6
+  language: script
+  pass_filenames: false
+  always_run: true

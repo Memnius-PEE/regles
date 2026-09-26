@@ -1,0 +1,17 @@
+# Chaque garde est testée dans les deux sens à chaque changement du socle.
+name: Tests des gardes
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  tester:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet pyyaml jsonschema
+      - run: git clone --quiet --depth 1 --branch v1 "https://github.com/${{ github.repository_owner }}/registre.git" /tmp/registre
+      - run: MEMNIUS_REGISTRE=/tmp/registre python3 -m unittest discover -s tests -v
