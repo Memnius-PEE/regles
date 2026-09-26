@@ -164,6 +164,13 @@ class A4Journal(DepotDeTest):
         self.ecrire("decisions/0001-adopter-le-socle.md", ENTREE.format(n="0001") + "Ajout après coup.\n")
         self.assertSonne("A4", "entrée publiée modifiée", "--base", self.base)
 
+    def test_entree_du_gabarit_remplie(self):
+        # Sujet créé avec « Use this template » : la première pull request remplit l'entrée 0001.
+        self.ecrire("decisions/0001-adopter-le-socle.md", ENTREE.format(n="0001").replace("2026-09-26", "AAAA-MM-JJ"))
+        base = subprocess.run(["git", "rev-parse", "HEAD"], cwd=self.d, capture_output=True, text=True).stdout.strip()
+        self.ecrire("decisions/0001-adopter-le-socle.md", ENTREE.format(n="0001"))
+        self.assertVerte("A4", "--base", base)
+
     def test_entree_publiee_supprimee(self):
         (self.d / "decisions/0001-adopter-le-socle.md").unlink()
         self.ecrire("decisions/0002.md", ENTREE.format(n="0002"))
