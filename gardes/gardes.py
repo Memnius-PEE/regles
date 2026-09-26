@@ -171,6 +171,8 @@ def garde_a4(dossier, fichiers, base=None, **_):
             etat, *chemins = ligne.split("\t")
             ancien = chemins[0]
             if NOM_ENTREE.match(ancien) and etat[0] in "MDRT":
+                if RESTES_GABARIT.search(git(dossier, "show", f"{base}:{ancien}").decode(errors="replace")):
+                    continue  # entrée encore à remplir (sujet tout juste créé depuis le gabarit) : pas publiée
                 action = {"M": "modifiée", "D": "supprimée", "R": "renommée", "T": "changée de type"}[etat[0]]
                 defauts.append(f"{ancien} : entrée publiée {action} (C2 : corriger par une nouvelle entrée)")
         portee = f"comparé à {base[:10]}"
